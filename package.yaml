@@ -27,7 +27,7 @@ library:
   dependencies:
     - bytestring
     - containers
-    - fltkhs
+#    - fltkhs
 executables:
   semester-project-exe:
     main:                Main.hs
@@ -39,7 +39,7 @@ executables:
     dependencies:
     - semester-project
     - bytestring
-    - fltkhs
+#    - fltkhs
 
 tests:
   semester-project-test:

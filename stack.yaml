@@ -40,7 +40,7 @@ packages:
 #   commit: e7b331f14bcffb8367cd58fbfc8b40ec7642100a
 #
 extra-deps:
- - fltkhs-0.8.0.3@sha256:90046b0e95d6859aafe0d333876ced95f71f73e5c43173d5a64189350b461b5d,14196
+ - fltkhs-0.8.0.3
 nix:
   packages:
     - autoconf
