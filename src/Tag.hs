@@ -37,7 +37,7 @@ getTag charArr
     name = map w2c (take 4 charArr)
     size = get32BitInteger (slice 4 7 charArr)
     flags = (charArr !! 8, charArr !! 9)
-    content = slice 10 (size + 10) charArr
+    content = slice 10 (size + 9) charArr
 
 eitherSize :: Either String Tag -> Int
 eitherSize (Left _)                 = (maxBound :: Int) - (500 :: Int)
@@ -57,9 +57,8 @@ tagsToMap tags = M.fromList $ zip (map name tags) tags
 createTag :: String -> (Word8, Word8) -> [Word8] -> Tag
 createTag name flags content = Tag name (length content) flags content
 
-insertTag :: Tag -> M.Map String Tag -> M.Map String Tag
-insertTag tag = M.insert (name tag) tag
+insertTagToMap :: Tag -> M.Map String Tag -> M.Map String Tag
+insertTagToMap tag = M.insert (name tag) tag
 
-deleteTag :: String -> M.Map String Tag -> M.Map String Tag
-deleteTag = M.delete
-  
+deleteTagFromMap :: String -> M.Map String Tag -> M.Map String Tag
+deleteTagFromMap = M.delete

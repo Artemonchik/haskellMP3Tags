@@ -1,6 +1,6 @@
 module Fields where
 
-import qualified Data.Map as M
+import qualified Data.Map.Strict as M
 
 frames :: M.Map String String
 frames =
