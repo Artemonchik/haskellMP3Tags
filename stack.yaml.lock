@@ -5,15 +5,66 @@
 
 packages:
 - completed:
-    hackage: fltkhs-0.8.0.3@sha256:90046b0e95d6859aafe0d333876ced95f71f73e5c43173d5a64189350b461b5d,14196
+    hackage: fltkhs-0.8.0.1@sha256:04563c1a19567abbefe8b7782ed75a65689ba3ffd6a2b2a9f9dbfaccf2acff0e,14196
     pantry-tree:
-      size: 34926
-      sha256: 6538e350bf1633d4b846c7b0fdab33efe8526cefa8d2b21ab5e10033a4175cd1
+      size: 35008
+      sha256: 34b0ce0608f4e8ee6879c17b3b4426937c72387958626b3e5fdd8ecd94ac4c64
   original:
-    hackage: fltkhs-0.8.0.3
-snapshots:
+    hackage: fltkhs-0.8.0.1
 - completed:
-    size: 491372
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/15/2.yaml
-    sha256: a98d091d911606d0d8adccbeb811b81bbd8cc2d888f99ef9e273350e8e9692a8
-  original: lts-15.2
+    hackage: vector-0.12.1.2@sha256:9291bc581f36e51d5bda9fce57cb980fbec3dd292996896f285fef39eb80a9a0,7364
+    pantry-tree:
+      size: 3784
+      sha256: f79eefc8ba2b57ded2276f48046e64663d37b210b6047b6b6ecb30c9da196216
+  original:
+    hackage: vector-0.12.1.2
+- completed:
+    hackage: primitive-0.7.0.1@sha256:a381571c36edc7dca28b77fe8159b43c14c640087ec5946adacf949feec64231,3433
+    pantry-tree:
+      size: 3221
+      sha256: fea4312bd404ad504e44a7fd933a3b3442c0a5e1c41bd8abec3c2e7282d88e18
+  original:
+    hackage: primitive-0.7.0.1
+- completed:
+    hackage: c2hs-0.28.6@sha256:47e402d4cd79204afb72d69c945bc5cf02f70d7f29ffe5aefc07343fd47743fe,9039
+    pantry-tree:
+      size: 16968
+      sha256: db5ec67271554af6b43e7aabc7ce3937c83864d0aec73802c6d7a27c904fdd5e
+  original:
+    hackage: c2hs-0.28.6
+- completed:
+    hackage: dlist-0.8.0.7@sha256:a5be833204b0a4740cc67a715b9edd0e6f6bc28794445255f67d15d46c91fd42,2066
+    pantry-tree:
+      size: 426
+      sha256: 0a33dda9769df2d277fa476aa5ee8d4ca19344f70e6db0242e201b3c35f2a727
+  original:
+    hackage: dlist-0.8.0.7
+- completed:
+    hackage: language-c-0.8.3@sha256:144951cb86c54720a5031026de8070a84240b64479875ce9f69ef2e1851c07b8,4900
+    pantry-tree:
+      size: 3416
+      sha256: 6c9445cdbf64a45a2fb8d27c4c85803e9d3b680677d1e23cc9e743aec69a3039
+  original:
+    hackage: language-c-0.8.3
+- completed:
+    hackage: alex-3.2.5@sha256:af0c4aac67849d8b35e8c16063517642a5c6b809d09fdb040ed9369f91cb26fb,4054
+    pantry-tree:
+      size: 5732
+      sha256: fdfac077ffd006b5bb8102edb3187f2d2587d9cde1d94cd9852b5ee077d05add
+  original:
+    hackage: alex-3.2.5
+- completed:
+    hackage: happy-1.19.12@sha256:acc67bfbf3af87892766781dd064c9447181ea81269a7a1e5fc9ace4a8fa4768,5691
+    pantry-tree:
+      size: 8693
+      sha256: 91502601a560862a5b90d776c0bd58bc2779ba5b7945c984817eaa3b9ca64564
+  original:
+    hackage: happy-1.19.12
+- completed:
+    hackage: syb-0.7.1@sha256:8d37b1e4d04a9aa8512dc6c2a06e02afc015a2fd3e735bdfeeacb5e2e853323c,2462
+    pantry-tree:
+      size: 3396
+      sha256: efe0ac2f5d5a3c34125c2dd665521a626237f49aa8fa289bfeeabe951b8a30e0
+  original:
+    hackage: syb-0.7.1
+snapshots: []

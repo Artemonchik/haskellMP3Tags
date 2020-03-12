@@ -1,3 +1,0 @@
-:set -fobject-code
-:set -lfltkc-dyn
-:m + Control.Concurrent
