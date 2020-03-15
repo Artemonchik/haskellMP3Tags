@@ -27,6 +27,7 @@ library:
   dependencies:
     - bytestring
     - containers
+    - text (>=1.2.2.0 && <1.3)
 #    - fltkhs
 
 executables:
@@ -49,6 +50,7 @@ executables:
       - semester-project
       - bytestring
       - fltkhs (==0.8.0.1)
+      - containers
 
 tests:
   semester-project-test:
