@@ -1,3 +1,5 @@
 .stack-work/
 semester-project.cabal
 *~
+.out/
+.src/music/
