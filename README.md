@@ -1,6 +1,12 @@
 # semester-project
 -----
-This project uses includes fltkhs library:
+Use this command for fast download
+
+```
+git clone --depth=1 https://github.com/Artemonchik/haskellMP3Tags/
+```
+
+This project includes fltkhs library:
 
 ```
 stack build --flag fltkhs:bundled
