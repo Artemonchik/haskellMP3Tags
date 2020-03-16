@@ -1,3 +1,3 @@
 # semester-project
 -----
-This project uses includes fltkhs library
+This project includes fltkhs library
