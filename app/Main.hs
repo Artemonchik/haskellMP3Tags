@@ -25,78 +25,10 @@ import Fields
 import qualified Data.Map.Strict as M
 import System.FilePath.Posix
 import Data.Text.Encoding
-import TagConvert
-type State = IORef ([Text], Maybe Text, Ref Window, Ref TextBuffer, Ref TextBuffer)
+import Components
 
+type State = IORef ([Text], Ref Window, Ref TextBuffer, Ref TextBuffer, [Ref TextEditor])
 
-chooseFileButtonCallback :: State -> M.Map Text (Ref TextBuffer) -> Text ->Ref Button -> IO()
-chooseFileButtonCallback state' buffers name _ -- callback for button with file name
- = do
-  (filenames, selectedFile, window, folderBuff, currTrackBuffer) <- readIORef state'
-  setText currTrackBuffer name
-  folderPath <- unpack <$> getText folderBuff
-  fileName <- unpack <$> getText currTrackBuffer
-  let fullPath = joinPath [folderPath, fileName]
-
-  handle <- openFile (fullPath) ReadMode
-  header <- B.hGet handle 10
-  let tagLen = get32BitSynchsafeInteger $ slice 6 10 $ B.unpack header
-  binBody <- B.hGet handle tagLen
-
-  let fieldNames =  M.elems fieldsToTagNames
-  let body = B.unpack binBody
-  let tagNameValuesMap = M.map (universalDecode . B.pack . content)  $ M.filterWithKey  (\k v -> (k `elem` fieldNames)) $ tagsToMap $ rights $ getTags body
---  fout <- openFile "out.txt" WriteMode
---  hPrint fout tagNameValuesMap
-  let buffersWithID3KeysList = map (\(key, buffer) -> (pack $ fromJust (M.lookup (unpack key) fieldsToTagNames), buffer))$ M.toList buffers
---  hPrint fout buffersWithID3KeysList
-  let valueBufferList = [(buffer, value) | (key, buffer) <- buffersWithID3KeysList, (tagKey, value) <- (M.toList tagNameValuesMap), (pack tagKey) == key]
-  _ <- mapM (\(buff, value) -> setText buff value ) valueBufferList
---  hClose fout
-  hClose handle
-  writeIORef state' (filenames, Just name, window, folderBuff, currTrackBuffer)
-
-createFileNameButton :: State -> M.Map Text (Ref TextBuffer) -> (Text, Int) -> IO (Ref Button) -- Returns new button with file name
-createFileNameButton state' buffers (name, index) = do
-  (filenames, selectedFile, window, buff, currTrackBuffer) <- readIORef state'
-  button <- buttonNew (toRectangle (35, 35 * index, 25, 25)) (Just name)
-  setCallback button $ chooseFileButtonCallback state' buffers name
-  return button
-
-showListOfSongs :: State -> M.Map Text (Ref TextBuffer) -> IO ()
-showListOfSongs state' buffers = do
-  (filenames, selectedFile, window, buff, currTrackBuffer) <- readIORef state'
-  begin window
-  scrolled <- scrolledNew (toRectangle (30,100,240,485)) Nothing
-  begin scrolled
-  pack <- packNew (toRectangle (30, 100, 240, 485)) (Just "Choosen files")
-  setBox pack DownFrame
-  begin pack
-  buttons <- mapM (createFileNameButton state' buffers) (zip filenames [1..])
-  
-  end pack
-  end scrolled
-  end window
-  redraw window
-
-getMP3NameListToState :: State -> M.Map Text (Ref TextBuffer) -> Ref Button -> IO ()
-getMP3NameListToState state' buffers button = do
-  (filenames, selectedFile, window, buffWithPath, currTrackBuffer) <- readIORef state'
-  text <- getText buffWithPath
-  list <- listDirectory (unpack text)
-  writeIORef state' (filter (isSuffixOf (pack ".mp3")) (fmap pack list), selectedFile, window, buffWithPath, currTrackBuffer)
-  showListOfSongs state' buffers
-  return ()
-
-createTagField :: State -> (Text, Int, Ref TextBuffer) -> IO (Ref TextEditor)
-createTagField state' (name, index, buffer) = do
- tagFieldEditor <-
-     textEditorNew
-       (Rectangle (Position (X 300) (Y (90 + 70 * index))) (Size (Width 300) (Height 30)))
-       (Just name)
- setBuffer tagFieldEditor (Just buffer)
- return tagFieldEditor
---   list <- listDi
 main = do
   window' <- windowNew (Size (Width 700) (Height 500)) Nothing (Just "MP3 Tags")
   begin window'
@@ -104,7 +36,8 @@ main = do
   folderBuff <- textBufferNew Nothing Nothing
   currentTrackBuff <- textBufferNew Nothing Nothing
 
-  state' <- newIORef ([] :: [Text], Nothing :: Maybe Text, window', folderBuff, currentTrackBuff)
+  state' <- newIORef ([] :: [Text], window', folderBuff, currentTrackBuff, [] :: [Ref TextEditor])
+
   chooseFolderField <-
     textEditorNew
       (Rectangle (Position (X 30) (Y 30)) (Size (Width 600) (Height 30)))
@@ -122,18 +55,20 @@ main = do
   setSpacing fieldsPack 30
   begin fieldsPack
 
-  let fieldNames = fmap pack $ M.keys fieldsToTagNames
-  _ <- textEditorNew (toRectangle (300, 100, 0, 0)) (Nothing)
-  tagValueBuffers <- mapM (\_ -> textBufferNew Nothing Nothing) fieldNames
-  textField <- mapM (createTagField state') (zip3 fieldNames [1..] tagValueBuffers)
-  
-
+  let fieldNames = pack <$> M.keys fieldNameToFrameName
+  _ <- textEditorNew (toRectangle (300, 100, 0, 0)) Nothing
+  frameEditorFieldBuffers <- mapM (\_ -> textBufferNew Nothing Nothing) fieldNames
+  frameEditorFields <- mapM createTagFrameEditField (zip3 fieldNames [1..] frameEditorFieldBuffers)
+  (filenames, window, buffWithPath, currTrackBuffer, _) <- readIORef state'
+  writeIORef state' (filenames, window, buffWithPath, currTrackBuffer, frameEditorFields)
   end fieldsPack
   end scrolled
 
   mp3FilesButton <- buttonNew (Rectangle (Position (X 530) (Y 60)) (Size (Width 100) (Height 30))) (Just (pack "Open folder"))
-  setCallback mp3FilesButton (getMP3NameListToState state' (M.fromList $ zip fieldNames tagValueBuffers))
-
+  setCallback mp3FilesButton (writeMP3NameListToStateAndCreateButtonsAndAddToWindow state')
+  
+  saveTagsButton <- buttonNew (Rectangle (Position (X 30) (Y 440)) (Size (Width 200) (Height 50))) (Just (pack "Save tags"))
+  setCallback saveTagsButton (saveTagsToFile state')
   end window'
   showWidget window'
   _ <- FL.run

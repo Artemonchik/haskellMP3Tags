@@ -3,13 +3,20 @@ module Tag
   , getTag
   , getTags
   , tagsToMap
+  , convertTagToWord8Arr
+  , convertTagsToWord8Arr
+  ,insertTagToMap
+  , createTag
   ) where
 
+import qualified Data.ByteString          as B
 import           Data.ByteString.Internal (c2w, w2c)
 import qualified Data.Map.Strict          as M
+import           Data.Text                (Text)
+import           Data.Text.Encoding
 import           Data.Word
-import           Lib                      (get32BitInteger,
-                                           get32BitSynchsafeInteger, slice)
+import           Lib
+import           Numbers
 import           System.IO
 
 data Tag =
@@ -62,3 +69,17 @@ insertTagToMap tag = M.insert (name tag) tag
 
 deleteTagFromMap :: String -> M.Map String Tag -> M.Map String Tag
 deleteTagFromMap = M.delete
+
+convertTagToWord8Arr :: Tag -> [Word8]
+convertTagToWord8Arr (Tag name size flags content) = w8name ++ w8size ++ w8flags ++ content
+  where
+    w8name = map c2w name
+    w8size =
+      map
+        (read . zeroFill8 . convertFromTo 2 10)
+        [slice 0 7 ssize, slice 8 15 ssize, slice 16 23 ssize, slice 24 31 ssize] :: [Word8]
+    w8flags = [fst flags, snd flags]
+    ssize = zeroFill32 $ convertFromTo 10 2 (show size)
+
+convertTagsToWord8Arr :: [Tag] -> [Word8]
+convertTagsToWord8Arr = concatMap convertTagToWord8Arr

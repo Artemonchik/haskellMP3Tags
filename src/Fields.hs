@@ -1,21 +1,23 @@
 module Fields
-  ( fieldsToTagNames
-  , tagNamesToFields
+  ( fieldNameToFrameName
+  , frameNameToFieldName
   ) where
 
 import qualified Data.Map.Strict as M
 
-fieldsToTagNames :: M.Map String String
-fieldsToTagNames =
+fieldNameToFrameName :: M.Map String String
+fieldNameToFrameName =
   M.fromList
     [ ("Album", "TALB")
-    , ("Author", "TPE1")
+    , ("Artist", "TPE1")
     , ("Date", "TDAT")
     , ("Text", "TEXT")
     , ("year", "TYER")
-    , ("Original name", "TIT2")
+    , ("Title", "TIT2")
+    , ("Album Artist", "TPE2")
+--    , ("Comment", "COMM")
     ]
 
 --    , ("Comment", "COMM")
-tagNamesToFields :: M.Map String String
-tagNamesToFields = M.fromList [(val, key) | (key, val) <- M.toList fieldsToTagNames]
+frameNameToFieldName :: M.Map String String
+frameNameToFieldName = M.fromList [(val, key) | (key, val) <- M.toList fieldNameToFrameName]
