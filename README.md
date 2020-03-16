@@ -1,6 +1,7 @@
 # semester-project
 -----
 This project uses includes fltkhs library:
+
 ```
 stack build --flag fltkhs:bundled
 stack run ghc
