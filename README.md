@@ -12,6 +12,8 @@ This project includes fltkhs library:
 stack build --flag fltkhs:bundled
 stack run ghc
 ```
+If you use Windows don't forget to read this guide
+https://hackage.haskell.org/package/fltkhs-0.8.0.3/docs/Graphics-UI-FLTK-LowLevel-FLTKHS.html#g:13
 
 **Description**
 -----
